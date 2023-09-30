@@ -22,7 +22,7 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
                 : "hover:bg-transparent hover:underline",
               "justify-start capitalize"
             )}>
-              {item}
+              Manage {item}
             </Link>
           ))}
         </aside>
