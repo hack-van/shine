@@ -17,7 +17,7 @@ export default function EventForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(console.log)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(console.log)} className="grid gap-2">
         <FormField
           control={form.control}
           name="username"
