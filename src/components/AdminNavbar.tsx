@@ -30,12 +30,12 @@ export default function AdminNavbar() {
         Questions
       </Link>
       <Link
-        href="/dashboard/workers"
+        href="/dashboard/users"
         className={buttonVariants({
           variant: "outline",
         })}
       >
-        Workers
+        Users
       </Link>
       </div>
     </nav>

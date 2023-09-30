@@ -3,7 +3,7 @@ import { buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
 
 export default function Page() {
-  const features = ["programs", "questions", "workers"];
+  const features = ["programs", "questions", "users"];
 
   return (
     <>
