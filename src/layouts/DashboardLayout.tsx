@@ -20,6 +20,7 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
           src={logo}
           alt="Youth Unlimited Logo"
           width={200}
+          className="invert dark:invert-0"
         ></Image>
       </Link>
       {features.map((item) => (
