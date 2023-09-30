@@ -6,6 +6,7 @@ import { api } from "@/utils/api";
 
 export default function Home() {
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
+  const {data} = api.survey.getSurveyInfo.useQuery({pid: 3})
 
   return (
     <>
