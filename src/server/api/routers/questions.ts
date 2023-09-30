@@ -5,7 +5,7 @@ import { getSurveyInfo } from "@/server/db/query";
 import { questions } from "@/server/db/schema";
 import { eq } from "drizzle-orm";
 
-export const surveyRouter = createTRPCRouter({
+export const questionsRouter = createTRPCRouter({
   createQuestion: publicProcedure
     .input(
       z.object({
@@ -42,7 +42,7 @@ export const surveyRouter = createTRPCRouter({
       return await ctx.db.delete(questions).where(eq(questions.qid, input.qid));
     }),
 
-  getQuestions: publicProcedure.mutation(async ({ ctx }) => {
+  getQuestions: publicProcedure.query(async ({ ctx }) => {
     return await ctx.db.select().from(questions);
   }),
 });
