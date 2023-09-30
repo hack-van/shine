@@ -7,14 +7,14 @@ export default function Page() {
     <>
       <AdminNavbar />
       <main className="min-h-screen flex flex-col max-w-md mx-auto text-center justify-center gap-5">
-        <h1>Dashboard - Workers</h1>
+        <h1>Dashboard - Users</h1>
         <Link
-          href="/dashboard/workers/add"
+          href="/dashboard/users/add"
           className={buttonVariants({
             variant: "outline",
           })}
         >
-          Add worker
+          Add user
         </Link>
       </main>
     </>
