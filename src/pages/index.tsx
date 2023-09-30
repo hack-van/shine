@@ -1,10 +1,12 @@
 import { buttonVariants } from "@/components/ui/button";
+import { api } from "@/utils/api";
 import { SparkleIcon } from "lucide-react";
 import Head from "next/head";
 import Link from "next/link";
 
 export default function Home() {
-  // const hello = api.example.hello.useQuery({ text: "from tRPC" });
+  const hello = api.example.hello.useQuery({ text: "from tRPC" });
+  const {data} = api.survey.getSurveyInfo.useQuery({pid: 3})
 
   return (
     <>
