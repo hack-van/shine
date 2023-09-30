@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { ZodArray, z } from "zod";
+import { z } from "zod";
 import {
   Form,
   FormControl,
@@ -33,7 +33,7 @@ export default function ProgramAddForm() {
   const form = useForm<ProgramSchema>({
     resolver: zodResolver(programSchema),
   });
-  
+
   if (!isLoading && !isError && !data) {
     return <ErrorPage statusCode={404} />;
   }
@@ -80,7 +80,6 @@ export default function ProgramAddForm() {
         <FormField
           control={form.control}
           name="startTime"
-          type="date"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Start time</FormLabel>
@@ -98,7 +97,6 @@ export default function ProgramAddForm() {
         <FormField
           control={form.control}
           name="endTime"
-          type="date"
           render={({ field }) => (
             <FormItem>
               <FormLabel>End time</FormLabel>
