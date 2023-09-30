@@ -38,8 +38,6 @@ export default function ProgramAddForm() {
     return <ErrorPage statusCode={404} />;
   }
 
-
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(console.log)} className="grid gap-2">
