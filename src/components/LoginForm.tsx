@@ -23,7 +23,7 @@ export const LoginForm = () => {
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
-
+      password: ""
     }
   })
 
@@ -50,13 +50,13 @@ export const LoginForm = () => {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input placeholder="Password" {...field} />
+                <Input {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit">Log in</Button>
       </form>
     </Form>
   )
