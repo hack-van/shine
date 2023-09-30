@@ -7,6 +7,7 @@ import {
   varchar,
   pgTableCreator,
   integer,
+  serial,
 } from "drizzle-orm/pg-core";
 import { type AdapterAccount } from "next-auth/adapters";
 
@@ -18,19 +19,73 @@ import { type AdapterAccount } from "next-auth/adapters";
  */
 export const myPgTable = pgTableCreator((name) => `shine_${name}`);
 
+type Role = "admin" | "worker";
+
 export const users = myPgTable("user", {
-  id: varchar("id", { length: 255 }).notNull().primaryKey(),
+  uid: serial("uid").primaryKey(),
+  firstName: varchar("firstName", { length: 255 }),
+  lastName: varchar("lastName", { length: 255 }),
+  email: varchar("email", { length: 255 }).notNull().unique(),
+  role: varchar("role", { length: 10 })
+    .$type<Role>()
+    .notNull()
+    .default("worker"),
+});
+
+export const programs = myPgTable("program", {
+  pid: serial("pid").primaryKey(),
+  description: varchar("description", { length: 255 }),
   name: varchar("name", { length: 255 }),
-  email: varchar("email", { length: 255 }).notNull(),
-  emailVerified: timestamp("emailVerified", {
-    mode: "date",
-  }).default(sql`CURRENT_TIMESTAMP(3)`),
-  image: varchar("image", { length: 255 }),
+  time: timestamp("time").notNull(),
+});
+
+export const questions = myPgTable("question", {
+  qid: serial("qid").primaryKey(),
+  question: varchar("question", { length: 255 }),
+});
+
+export const answer = myPgTable("answer", {
+  aid: serial("aid").primaryKey(),
+  value: varchar("value", { length: 255 }),
 });
 
 export const usersRelations = relations(users, ({ many }) => ({
   accounts: many(accounts),
+  programs: many(usersToPrograms),
 }));
+
+export const programsRelations = relations(programs, ({ many }) => ({
+  users: many(usersToPrograms),
+}));
+
+export const usersToPrograms = myPgTable(
+  "users_to_programs",
+  {
+    uid: integer("uid")
+      .notNull()
+      .references(() => users.uid),
+    pid: integer("pid")
+      .notNull()
+      .references(() => programs.pid),
+  },
+  (t) => ({
+    pk: primaryKey(t.uid, t.pid),
+  }),
+);
+
+export const usersToProgramsRelation = relations(
+  usersToPrograms,
+  ({ one }) => ({
+    user: one(programs, {
+      fields: [usersToPrograms.pid],
+      references: [programs.pid],
+    }),
+    program: one(users, {
+      fields: [usersToPrograms.uid],
+      references: [users.uid],
+    }),
+  }),
+);
 
 export const accounts = myPgTable(
   "account",
@@ -52,11 +107,11 @@ export const accounts = myPgTable(
   (account) => ({
     compoundKey: primaryKey(account.provider, account.providerAccountId),
     userIdIdx: index("userId_idx").on(account.userId),
-  })
+  }),
 );
 
 export const accountsRelations = relations(accounts, ({ one }) => ({
-  user: one(users, { fields: [accounts.userId], references: [users.id] }),
+  user: one(users, { fields: [accounts.userId], references: [users.uid] }),
 }));
 
 export const sessions = myPgTable(
@@ -70,11 +125,11 @@ export const sessions = myPgTable(
   },
   (session) => ({
     userIdIdx: index("userId_idx").on(session.userId),
-  })
+  }),
 );
 
 export const sessionsRelations = relations(sessions, ({ one }) => ({
-  user: one(users, { fields: [sessions.userId], references: [users.id] }),
+  user: one(users, { fields: [sessions.userId], references: [users.uid] }),
 }));
 
 export const verificationTokens = myPgTable(
@@ -86,5 +141,5 @@ export const verificationTokens = myPgTable(
   },
   (vt) => ({
     compoundKey: primaryKey(vt.identifier, vt.token),
-  })
+  }),
 );
