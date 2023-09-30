@@ -12,7 +12,7 @@ export default function Page() {
         <div className="flex min-h-screen flex-col items-center justify-center sm:flex-row">
           {features.map((feature) => {
             return (
-              <section className="m-2 flex w-full max-w-md flex-col items-center justify-center gap-3 border-2 py-10 bg-slate-100 rounded-lg">
+              <section key={feature} className="m-2 flex w-full max-w-md flex-col items-center justify-center gap-3 border-2 py-10 bg-slate-100 rounded-lg">
                 <h2 className="text-black">{feature.toUpperCase()}</h2>
                 <Link
                   href={`/dashboard/${feature}`}
