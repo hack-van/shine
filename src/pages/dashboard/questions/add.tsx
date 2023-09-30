@@ -1,8 +1,8 @@
 import { z } from "zod";
 
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import QuestionForm from "@/components/QuestionForm";
-import AdminNavbar from "@/components/AdminNavbar";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { DashboardLayout } from "@/layouts/DashboardLayout";
 
 const questionSchema = z.object({
   title: z.string().nonempty({
@@ -14,9 +14,8 @@ type QuestionSchema = z.infer<typeof questionSchema>;
 
 export default function AddPage() {
   return (
-    <div>
-      <AdminNavbar />
-      <main className="flex min-h-screen items-center justify-center">
+    <DashboardLayout>
+      <div className="flex flex-1 flex-col justify-center items-center">
         <Card className="w-full max-w-md">
           <CardHeader>
             <h1 className="text-2xl font-bold tracking-tight">Add Question Form</h1>
@@ -25,7 +24,7 @@ export default function AddPage() {
             <QuestionForm />
           </CardContent>
         </Card>
-      </main>
-    </div>
+      </div>
+    </DashboardLayout >
   );
 }
