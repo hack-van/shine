@@ -30,15 +30,15 @@ type ProgramSchema = z.infer<typeof programSchema>;
 
 export default function ProgramAddForm() {
   const { data, isError, isLoading } = api.question.getAll.useQuery();
-
-  if (!isLoading && !isError && !data) {
-    return <ErrorPage statusCode={404} />;
-  }
-  console.log("data", data);
-
   const form = useForm<ProgramSchema>({
     resolver: zodResolver(programSchema),
   });
+  
+  if (!isLoading && !isError && !data) {
+    return <ErrorPage statusCode={404} />;
+  }
+
+
 
   return (
     <Form {...form}>
