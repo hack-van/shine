@@ -6,7 +6,7 @@ export default function Page() {
   return (
     <>
       <AdminNavbar />
-      <main>
+      <main className="min-h-screen flex flex-col max-w-md mx-auto text-center justify-center gap-5">
         <h1>Dashboard - Questions</h1>
         <Link
           href="/dashboard/questions/add"
@@ -14,7 +14,7 @@ export default function Page() {
             variant: "outline",
           })}
         >
-          Add questions
+          Add question
         </Link>
       </main>
     </>
