@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ['latin'] })
 export default function Home() {
   return (
     <main className="min-h-screen flex flex-col items-center justify-center">
-      <div className="mb-5">
+      <div>
         <h3 className="text-lg font-medium">Event Form</h3>
         <p className="text-sm text-muted-foreground">
           Form to track your events

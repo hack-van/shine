@@ -1,16 +1,31 @@
-import { Form, FormField, FormLabel, FormControl, FormItem, FormDescription, FormMessage } from "./ui/form"
-import { Input } from "./ui/input"
-import { Button } from "./ui/button"
-import { z } from "zod"
-import { useForm } from "react-hook-form"
+import {
+  Form,
+  FormField,
+  FormLabel,
+  FormControl,
+  FormItem,
+  FormDescription,
+  FormMessage,
+} from "./ui/form";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
 
 const formSchema = z.object({
   username: z.string().min(2, {
     message: "Username must be at least 2 characters.",
   }),
-})
+});
 
-type FormSchema = z.infer<typeof formSchema>
+const questions = [
+  "How many people attended today?",
+  "How many volunteer hours are taken?",
+  "Comment",
+  "Feedback",
+];
+
+type FormSchema = z.infer<typeof formSchema>;
 
 export default function EventForm() {
   const form = useForm<FormSchema>({});
@@ -18,24 +33,31 @@ export default function EventForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(console.log)} className="grid gap-2">
-        <FormField
-          control={form.control}
-          name="username"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Username</FormLabel>
-              <FormControl>
-                <Input placeholder="shadcn" {...field} />
-              </FormControl>
-              <FormDescription>
-                This is your public display name.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit">Submit</Button>
+        {questions.map((q) => {
+          return (
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{q}</FormLabel>
+                  {/* <FormControl> */}
+                  <Input
+                    placeholder=""
+                    // {...field}
+                  />
+                  {/* </FormControl> */}
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          );
+        })}
+
+        <Button className="mt-5" type="submit">
+          Submit
+        </Button>
       </form>
     </Form>
-  )
+  );
 }
