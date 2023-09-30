@@ -89,12 +89,12 @@ export default function UserAssignForm() {
         <FormField
           control={form.control}
           name="role"
-          render={({ field }) => (
+          render={({}) => (
             <FormItem>
               <FormLabel>Programs</FormLabel>
               <div className="flex flex-col ">
-                {programs.map((program) => (
-                  <Checkbox defaultSelected size="lg" color="success">
+                {programs.map((program, i) => (
+                  <Checkbox key={i} defaultSelected size="lg" color="success">
                     {program}
                   </Checkbox>
                 ))}
