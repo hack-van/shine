@@ -11,7 +11,7 @@ export const smsRouter = createTRPCRouter({
     const client = Twilio(env.TWILIO_ACCOUNT_SID, env.TWILIO_AUTH_TOKEN);
     return client.messages
     .create({
-      body: `Please fill out this form the link is ${env.NEXTAUTH_URL}/survey/${input.formId}`,
+      body: `Please fill out this form the link is ${process.env.NODE_ENV === "production" ? "https://" : ""}${env.NEXTAUTH_URL}/survey/${input.formId}`,
       from: '+17128833461',
       to: input.phone
     })
