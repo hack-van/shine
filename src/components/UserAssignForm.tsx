@@ -8,6 +8,7 @@ import {
   DropdownItem,
   ButtonNextUI,
 } from "@nextui-org/react";
+import { Checkbox } from "@nextui-org/react";
 
 import {
   Form,
@@ -46,16 +47,7 @@ const userSchema = z.object({
 
 type UserSchema = z.infer<typeof userSchema>;
 
-const programs = [
-  {
-    key: "CreativeLife",
-    label: "CreativeLife",
-  },
-  {
-    key: "LifeStory",
-    label: "LifeStory",
-  },
-];
+const programs = ["creativeLife", "Mentorship"];
 
 export default function UserAssignForm() {
   const form = useForm<UserSchema>({
@@ -107,9 +99,14 @@ export default function UserAssignForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Programs</FormLabel>
-              <FormControl>
-                <Input type="" placeholder="Place your role here" {...field} />
-              </FormControl>
+              <div className="flex flex-col ">
+                {programs.map((program) => (
+                  <Checkbox defaultSelected size="lg" color="success">
+                    {program}
+                  </Checkbox>
+                ))}
+              </div>
+
               <FormMessage />
             </FormItem>
           )}
