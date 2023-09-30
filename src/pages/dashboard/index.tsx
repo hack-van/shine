@@ -16,9 +16,9 @@ export default function Page() {
     <DashboardLayout>
       <main>
         <div className="container flex justify-center items-center m-5">
-        {blocks.map((block) => {
+        {blocks.map((block, i) => {
           return (
-            <section className="m-3 flex flex-col p-3 border justify-center items-center">
+            <section key={i} className="m-3 flex flex-col p-3 border justify-center items-center">
               <h3 className="text-2xl">{block.prompt}</h3>
               <p className="text-2xl">{block.answer}</p>
             </section>
