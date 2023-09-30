@@ -1,12 +1,11 @@
-import AdminNavbar from "@/components/AdminNavbar";
+import { DashboardLayout } from "@/layouts/DashboardLayout";
 
 export default function Page() {
   return (
-    <>
-      <AdminNavbar />
+    <DashboardLayout>
       <main>
         <h1>Dashboard - Program add</h1>
       </main>
-    </>
+    </DashboardLayout>
   );
 }
