@@ -20,3 +20,7 @@ export const getSurveyInfo = async (pid: number) => {
     programs: await getPrograms(pid),
   };
 };
+
+const test = () => {
+    
+}
