@@ -5,7 +5,7 @@ export default function Page() {
     <>
       <AdminNavbar />
       <main>
-        <h1>Dashboard - Program</h1>
+        <h1>Dashboard - Workers add</h1>
       </main>
     </>
   );
