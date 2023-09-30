@@ -1,9 +1,26 @@
 import { SurveyForm } from "@/components/SurveyForm";
 import { api } from "@/utils/api";
+import ErrorPage from 'next/error';
 import Head from "next/head";
+import { useRouter } from "next/router";
 
 export default function Page() {
-  const { data: program } = api.programs.getById.useQuery({id: 1})
+  const router = useRouter();
+  const id = +(router.query.id as string);
+
+  if (isNaN(id)) {
+    return <ErrorPage statusCode={404} />
+  }
+
+  return <SurveyPage id={id} />
+}
+
+const SurveyPage = ({ id }: { id: number }) => {
+  const { data: program, isError, isLoading } = api.programs.getById.useQuery({ id })
+
+  if (!isLoading && !isError && !program) {
+    return <ErrorPage statusCode={404} />
+  }
 
   return <>
     <Head>
