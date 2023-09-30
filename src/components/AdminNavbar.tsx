@@ -2,9 +2,9 @@ import { SparkleIcon } from "lucide-react";
 import { buttonVariants } from "./ui/button";
 import Link from "next/link";
 
-export default function Navbar() {
+export default function AdminNavbar() {
   return (
-    <nav className="sticky top-0 flex items-center justify-around border-b px-2 py-1">
+    <nav className="sticky top-0 flex items-center justify-between border-b px-2 py-1">
       <Link
         href="/"
         className="font-xl inline-flex font-semibold tracking-tight"
@@ -12,30 +12,32 @@ export default function Navbar() {
         <SparkleIcon className="mr-2" />
         Shine
       </Link>
+      <div className="flex justify-between sm:gap-1 gap-3">
       <Link
-        href="/program"
+        href="/dashboard/programs"
         className={buttonVariants({
           variant: "outline",
         })}
       >
-        Program
+        Programs
       </Link>
       <Link
-        href="/survey"
+        href="/dashboard/questions"
         className={buttonVariants({
           variant: "outline",
         })}
       >
-        Survey
+        Questions
       </Link>
       <Link
-        href="/dashboard"
+        href="/dashboard/workers"
         className={buttonVariants({
           variant: "outline",
         })}
       >
-        Dashboard
+        Workers
       </Link>
+      </div>
     </nav>
   );
 }

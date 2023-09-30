@@ -1,14 +1,11 @@
-import Navbar from "@/components/Navbar";
-import { buttonVariants } from "@/components/ui/button";
-import { NavigationMenu } from "@/components/ui/navigation-menu";
-import { Link, SparkleIcon } from "lucide-react";
+import AdminNavbar from "@/components/AdminNavbar";
 
 export default function Page() {
   return (
     <>
-      <Navbar></Navbar>
+      <AdminNavbar></AdminNavbar>
       <main>
-        Hello
+        Dashboard
       </main>
     </>
   );
