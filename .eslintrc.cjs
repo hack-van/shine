@@ -24,7 +24,22 @@ const config = {
       },
     ],
     "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+    "@typescript-eslint/no-misused-promises": [
+      2,
+      {
+        checksVoidReturn: {
+          attributes: false,
+        },
+      },
+    ],
   },
+  ignorePatterns: [
+    "node_modules/",
+    ".next/",
+    "out/",
+    "public/",
+    "src/components/ui",
+  ]
 };
 
 module.exports = config;
