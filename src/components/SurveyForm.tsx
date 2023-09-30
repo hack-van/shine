@@ -4,28 +4,27 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 
 type Question = { id: string, title: string }
+type Props = {
+  questions: {
+    qid: number,
+    question: string | null
+  }[]
+}
 
-const questions: Question[] = [
-  { id: "kids-mentored", title: "How many kids mentored?" },
-  { id: "meals-serverd", title: "How many kids serverd?" },
-]
-
-export const SurveyForm = () => {
-  const defaultValues = questions.map(question => question.id)
+export const SurveyForm = ({questions}: Props) => {
   const form = useForm();
-
 
   return <Form {...form}>
     <form className="grid gap-8" onSubmit={form.handleSubmit((data) => console.log(data))}>
       {
-        questions.map(question => (
+        questions.map(q => (
           <FormField
-            key={question.id}
+            key={q.qid}
             control={form.control}
-            name={question.id}
+            name={`${q.qid}`}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{question.title}</FormLabel>
+                <FormLabel>{q.question}</FormLabel>
                 <FormControl>
                   <Input type="number" min={0} required {...field} />
                 </FormControl>
