@@ -33,6 +33,13 @@ const config = {
       },
     ],
   },
+  ignorePatterns: [
+    "node_modules/",
+    ".next/",
+    "out/",
+    "public/",
+    "src/components/ui",
+  ]
 };
 
 module.exports = config;
