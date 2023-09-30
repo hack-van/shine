@@ -1,5 +1,7 @@
 import { SparkleIcon } from "lucide-react";
 import Link from "next/link";
+import Logo from "public/logo.png";
+import Image from "next/image";
 
 export default function AdminNavbar() {
   return (
@@ -8,10 +10,13 @@ export default function AdminNavbar() {
         href="/dashboard"
         className="font-xl inline-flex font-semibold tracking-tight"
       >
-        <SparkleIcon className="mr-2" />
-        Shine
+        <Image
+          src={Logo}
+          alt="Youth Unlimited Logo"
+          width={200}
+          height={200}
+        ></Image>
       </Link>
-  
     </nav>
   );
 }
