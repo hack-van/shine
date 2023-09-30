@@ -44,6 +44,39 @@ export const questions = myPgTable("question", {
   question: varchar("question", { length: 255 }),
 });
 
+export const programsToQuestions = myPgTable(
+  "programs_to_questions",
+  {
+    pid: integer("pid")
+      .notNull()
+      .references(() => programs.pid),
+    qid: integer("qid")
+      .notNull()
+      .references(() => questions.qid),
+  },
+  (t) => ({
+    pk: primaryKey(t.pid, t.qid),
+  }),
+);
+
+export const programsToQuestionsRelation = relations(
+  programsToQuestions,
+  ({ one }) => ({
+    user: one(questions, {
+      fields: [programsToQuestions.qid],
+      references: [questions.qid],
+    }),
+    program: one(programs, {
+      fields: [programsToQuestions.pid],
+      references: [programs.pid],
+    }),
+  }),
+);
+
+export const questionRelations = relations(questions, ({ many }) => ({
+  programs: many(programsToQuestions),
+}));
+
 export const answer = myPgTable("answer", {
   aid: serial("aid").primaryKey(),
   value: varchar("value", { length: 255 }),
@@ -56,6 +89,7 @@ export const usersRelations = relations(users, ({ many }) => ({
 
 export const programsRelations = relations(programs, ({ many }) => ({
   users: many(usersToPrograms),
+  questions: many(programsToQuestions),
 }));
 
 export const usersToPrograms = myPgTable(
