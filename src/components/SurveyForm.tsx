@@ -11,6 +11,7 @@ const questions: Question[] = [
 ]
 
 export const SurveyForm = () => {
+  const defaultValues = questions.map(question => question.id)
   const form = useForm();
 
 
