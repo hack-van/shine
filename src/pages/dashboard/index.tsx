@@ -1,7 +1,12 @@
+import AdminNavbar from "@/components/AdminNavbar";
+
 export default function Page() {
-  return <>
-    <main>
-      <h1>Dashboard</h1>
-    </main>
-  </>
+  return (
+    <>
+      <AdminNavbar></AdminNavbar>
+      <main>
+        Dashboard
+      </main>
+    </>
+  );
 }

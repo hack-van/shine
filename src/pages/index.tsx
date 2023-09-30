@@ -14,22 +14,28 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="flex min-h-screen flex-col">
-        <nav className="border-b px-2 py-1 sticky top-0 flex items-center justify-between">
-          <Link href="/" className="inline-flex font-semibold font-xl tracking-tight">
+        <nav className="sticky top-0 flex items-center justify-between border-b px-2 py-1">
+          <Link
+            href="/"
+            className="font-xl inline-flex font-semibold tracking-tight"
+          >
             <SparkleIcon className="mr-2" />
             Shine
           </Link>
-          <Link href="/dashboard" className={buttonVariants({
-            variant: "outline",
-          })}>
+          <Link
+            href="/dashboard"
+            className={buttonVariants({
+              variant: "outline",
+            })}
+          >
             Go to dashboard
           </Link>
         </nav>
-        <main className="flex flex-1 flex-col justify-center items-center gap-2">
-          <h1 className="text-4xl font-bold">
-            Welcome to Shine
-          </h1>
-          <Link href="/dashboard" className={buttonVariants()}>Go to dashboard</Link>
+        <main className="flex flex-1 flex-col items-center justify-center gap-2">
+          <h1 className="text-4xl font-bold">Welcome to Shine</h1>
+          <Link href="/dashboard" className={buttonVariants()}>
+            Go to dashboard
+          </Link>
         </main>
       </div>
     </>
