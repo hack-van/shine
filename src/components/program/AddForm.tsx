@@ -42,11 +42,9 @@ export default function ProgramAddForm() {
   });
 
   const onHandleSubmit = async (data: ProgramSchema) => {
-    // programToQuestionSchema._processInputParams
-    
-    console.log(questionIds)
+
     await mutate({field: data, question_ids: [...questionIds]});
-    // window.location.href = "/dashboard/programs";
+    window.location.href = "/dashboard/programs";
   };
 
   const removeQuestionId = (idDel: number) => {

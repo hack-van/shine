@@ -15,15 +15,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { SetStateAction } from "react"
+import { useRouter } from "next/router"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+  data: TData[],
+  setSelectedData: any
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  setSelectedData
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -58,6 +62,10 @@ export function DataTable<TData, TValue>({
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
+                onClick={() => {
+                  setSelectedData(row.original)
+                }}
+                className="cursor-pointer"
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>

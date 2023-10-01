@@ -6,19 +6,10 @@ import { Link } from "lucide-react";
 import ErrorPage from "next/error";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { Card, CardContent, CardDescription, CardTitle } from "../ui/card";
 
-export default function Page() {
-  const router = useRouter();
-  const id = +(router.query.id as string);
-
-  if (isNaN(id)) {
-    return <ErrorPage statusCode={404} />;
-  }
-
-  return <ProgramPage id={id} />;
-}
-
-const ProgramPage = ({ id }: { id: number }) => {
+export const SelectedProgram = ({ id }: { id: number }) => {
+  console.log("ID", id);
   const {
     data: programToQuestions,
     isError: isError1,
@@ -38,7 +29,7 @@ const ProgramPage = ({ id }: { id: number }) => {
     isLoading,
   } = api.question.getAll.useQuery();
 
-  const filteredData = questions
+  const selectedQuestions = questions
     ? questions?.filter((data) => qidSet.has(data.qid))
     : [];
 
@@ -46,18 +37,23 @@ const ProgramPage = ({ id }: { id: number }) => {
     return <ErrorPage statusCode={404} />;
   }
 
+  console.log("HH", selectedQuestions);
   return (
-    <DashboardLayout>
-      <main className="m-10 flex max-w-md flex-col items-start gap-5">
-        <h1>Program name: {program?.name}</h1>
-        <p>Program description: {program?.description}</p>
-        <p>Program location: {program?.location}</p>
+    <Card className="flex flex-col items-start gap-5 p-5">
+      <CardTitle>{program?.name}</CardTitle>
+      <CardDescription>{program?.description}</CardDescription>
+      <CardContent className="flex flex-col gap-5">
+        <p>{program?.location}</p>
 
-        <h3>Program related questions</h3>
-        <ul>
-          {questions ? filteredData?.map((q) => <ol>{q.question}</ol>) : <></>}
-        </ul>
-      </main>
-    </DashboardLayout>
+        {selectedQuestions && selectedQuestions.length > 0 ? (
+          <div className="flex flex-col gap-2">
+            <h3>Program related questions</h3>
+            <ol>{selectedQuestions?.map((q) => <li>{q.question}</li>)}</ol>
+          </div>
+        ) : (
+          <>No questions found</>
+        )}
+      </CardContent>
+    </Card>
   );
 };
