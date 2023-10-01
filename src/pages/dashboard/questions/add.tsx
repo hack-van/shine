@@ -18,8 +18,6 @@ type QuestionSchema = z.infer<typeof questionSchema>;
 export default function AddPage() {
   const { data, isError, isLoading } = api.question.getAll.useQuery();
 
-  console.log(`question:${data}`);
-
   if (!isLoading && !isError && !data) {
     return <ErrorPage statusCode={404} />;
   }
@@ -34,7 +32,7 @@ export default function AddPage() {
           </CardHeader>
           <CardContent>
             <QuestionForm />
-            <QuestionSearch questions={data} />
+            {!isLoading ? <QuestionSearch questions={data} /> : <div></div>}
           </CardContent>
         </Card>
       </div>

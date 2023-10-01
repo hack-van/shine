@@ -7,7 +7,7 @@ const SearchResultWrapper = ({ question }) => {
   return (
     <div>
       <div className="flex w-full justify-between p-4">
-        <span className="inline-bloack w-auto">{question}</span>
+        <span className="inline-bloack w-auto">{question.question}</span>
         <div className="flex justify-between">
           <EditIcon className="mr-4" color="white" size={18} />
           <DeleteIcon className="mr-4" color="white" size={18} />
