@@ -32,7 +32,7 @@ export default function Page() {
         {isLoading ? (
           <p>No users found</p>
         ) : (
-          <DataTable columns={userColumns} data={data!} />
+          <DataTable columns={userColumns} data={data!}/>
         )}
       </main>
     </DashboardLayout>

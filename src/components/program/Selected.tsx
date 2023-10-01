@@ -1,10 +1,5 @@
-import { buttonVariants } from "@/components/ui/button";
-import { DashboardLayout } from "@/layouts/DashboardLayout";
 import { api } from "@/utils/api";
-import { Link } from "lucide-react";
 import ErrorPage from "next/error";
-import Head from "next/head";
-import { useRouter } from "next/router";
 import { Card, CardContent, CardDescription, CardTitle } from "../ui/card";
 
 export const SelectedProgram = ({ id }: { id: number }) => {

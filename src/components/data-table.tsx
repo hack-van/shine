@@ -21,7 +21,7 @@ import { useRouter } from "next/router";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  setSelectedData: Dispatch<SetStateAction<TData | null>>;
+  setSelectedData?: Dispatch<SetStateAction<TData | null>>;
 }
 
 export function DataTable<TData, TValue>({
@@ -63,9 +63,11 @@ export function DataTable<TData, TValue>({
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
                 onClick={() => {
-                  setSelectedData(row.original);
+                  if (setSelectedData) {
+                    setSelectedData?.(row.original);
+                  }
                 }}
-                className="cursor-pointer"
+                className={`${setSelectedData ? "cursor-pointer" : ""}`}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
