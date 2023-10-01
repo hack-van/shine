@@ -29,7 +29,6 @@ export type ProgramSchema = z.infer<typeof programSchema>;
 export default function ProgramAddForm() {
   const { data, isError, isLoading } = api.question.getAll.useQuery();
   const { mutate } = api.programs.createOne.useMutation();
-  const router = useRouter();
 
   const form = useForm<ProgramSchema>({
     resolver: zodResolver(programSchema),
