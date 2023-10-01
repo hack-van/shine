@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { db } from "./index";
-import { programs, programsToQuestions, questions } from "./schema";
+import { programs, programsToQuestions, questions } from "./schema/data";
 
 export const getQuestionsByPid = (pid: number) => {
   return db
