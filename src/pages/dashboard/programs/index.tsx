@@ -10,7 +10,7 @@ import { programColumns } from "@/components/program/columns";
 export default function Page() {
   const { data, isError, isLoading } = api.programs.getAll.useQuery();
 
-  if (!isLoading && !isError && !data) {
+  if (isError) {
     return <ErrorPage statusCode={404} />;
   }
 
@@ -26,10 +26,10 @@ export default function Page() {
           Add program
         </Link>
         All programs
-        {data ? (
-          <DataTable columns={programColumns} data={data} />
+        {isLoading ? (
+          <p>No program found</p>
         ) : (
-          <p>We do not have any program for now</p>
+          <DataTable columns={programColumns} data={data} />
         )}
       </main>
     </DashboardLayout>

@@ -21,8 +21,6 @@ export const programSchema = z.object({
   }),
   description: z.string(),
   location: z.string(),
-  questions: z.string().array(),
-  users: z.string().array(),
 });
 
 export type ProgramSchema = z.infer<typeof programSchema>;
@@ -32,6 +30,11 @@ export default function ProgramAddForm() {
   const form = useForm<ProgramSchema>({
     resolver: zodResolver(programSchema),
   });
+  const onHandleSubmit = (data: ProgramSchema) => {
+    console.log("LAH", data)
+    api.programs.createOne.useQuery({data});
+    return;
+  }
 
   if (!isLoading && !isError && !data) {
     return <ErrorPage statusCode={404} />;
@@ -39,7 +42,7 @@ export default function ProgramAddForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(console.log)} className="grid gap-2">
+      <form onSubmit={form.handleSubmit(onHandleSubmit)} className="grid gap-2">
         <FormField
           control={form.control}
           name="name"
@@ -79,7 +82,7 @@ export default function ProgramAddForm() {
           name="location"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Start time</FormLabel>
+              <FormLabel>Location</FormLabel>
               <FormControl>
                 <Input
                   type="text"
@@ -96,7 +99,7 @@ export default function ProgramAddForm() {
           {data ? (
             data.map((q) => {
               return (
-                <div key={q.qid} className="border p-2 m-3">
+                <div key={q.qid} className="m-3 border p-2">
                   <Checkbox></Checkbox>
                   &emsp;
                   <label>
@@ -109,7 +112,6 @@ export default function ProgramAddForm() {
             <>No question found</>
           )}
         </div>
-
         <Button type="submit">Submit</Button>
       </form>
     </Form>
