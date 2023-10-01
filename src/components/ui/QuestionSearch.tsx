@@ -37,6 +37,7 @@ const SearchResultWrapper = ({ question, qid }) => {
       qid: qid,
       question: editQuestion,
     });
+    window.location.reload(); // TEMPORARY FIX TO REFRESH
   };
 
   return (
