@@ -1,4 +1,4 @@
-import { programs, programsToQuestions, questions, usersToPrograms } from "@/server/db/schema";
+import { answers, programs, programsToQuestions, questions, usersToPrograms } from "@/server/db/schema";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "../trpc";
@@ -23,5 +23,10 @@ export const surveyRouter = createTRPCRouter({
       return {
         programs: programsResult.map(p => p.programs)
       }
+    }),
+  postAnswer: publicProcedure
+    .input(z.array(z.object({ pid: z.number(), qid: z.number(), uid: z.number(), content: z.number() })))
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.db.insert(answers).values(input);
     }),
 })

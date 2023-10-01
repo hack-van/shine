@@ -25,21 +25,41 @@ export default function Page() {
   if (data === undefined || isError) return <div>Error</div>
   return (
     <>
-      <SurveyMultistepForm programs={data.programs} />
+      <SurveyMultistepForm programs={data.programs} uid={id} />
     </>
   )
 }
 
-function SurveyMultistepForm({ programs }: { programs: Programs }) {
+function SurveyMultistepForm({ programs, uid }: { programs: Programs, uid: number }) {
+  const [ done, setDone ] = useState(false)
+  const { mutate, isLoading } = api.survey.postAnswer.useMutation();
   const { toast } = useToast()
   const [answer, setAnswer] = useState<Answer>({})
   const [step, setStep] = useState(0);
   const next = () => setStep(step => Math.min(step + 1, programs.length - 1))
   const prev = () => setStep(step => Math.max(step - 1, 0));
   const submit = () => {
-    console.log(answer)
-    toast({
-      title: "Thank you for your submission"
+    const data = Object.entries(answer).map(([key, value]) => {
+      const [pid, qid] = key.split("#")
+      return {
+        uid,
+        pid: +pid!,
+        qid: +qid!,
+        content: value
+      }
+    })
+    console.log(data)
+    return mutate(data, {
+      onSuccess() {
+        toast({
+          title: "Thank you for your submission"
+        })
+      },
+      onError() {
+        toast({
+          title: "Something went wrong",
+        })
+      }
     })
   }
 
@@ -62,7 +82,7 @@ function SurveyMultistepForm({ programs }: { programs: Programs }) {
       {/* Navigation */}
       <div className="grid gap-2 grid-cols-2">
         <Button variant="ghost" disabled={step === 0} onClick={prev}>Previous</Button>
-        <Button onClick={step === programs.length - 1 ? submit : next}>
+        <Button onClick={step === programs.length - 1 ? submit : next} disabled={isLoading}>
           {step === programs.length - 1 ? "Submit" : "Next"}
         </Button>
       </div>
