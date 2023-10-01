@@ -14,8 +14,6 @@ import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
 import { api } from "@/utils/api";
 import ErrorPage from "next/error";
-import { useState } from "react";
-import { SettingsUpdateListInstance } from "twilio/lib/rest/supersim/v1/settingsUpdate";
 
 export const programSchema = z.object({
   name: z.string().nonempty({
@@ -25,38 +23,24 @@ export const programSchema = z.object({
   location: z.string(),
 });
 
+export const programToQuestionsArraySchema = z.object({
+  pid: z.number(),
+  qid: z.number(),
+});
+
 export type ProgramSchema = z.infer<typeof programSchema>;
 
 export default function ProgramAddForm() {
   const { data, isError, isLoading } = api.question.getAll.useQuery();
   const { mutate } = api.programs.createOne.useMutation();
-  const [questionIds, setQuestionIds] = useState<Set<number>>(new Set());
 
-  const form = useForm<programSchema>({
+  const form = useForm<ProgramSchema>({
     resolver: zodResolver(programSchema),
   });
 
   const onHandleSubmit = (data: ProgramSchema) => {
     mutate(data);
-    window.location.href = "/dashboard/programs";
-  };
-
-  const removeQuestionId = (idDel: number) => {
-    setQuestionIds(
-      (questionIds) => new Set([...questionIds].filter((id) => id !== idDel)),
-    );
-  };
-
-  const addQuestionId = (idAdd: number) => {
-    setQuestionIds((questionIds) => new Set(questionIds.add(idAdd)));
-  };
-
-  const onCheckboxChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    qid: number,
-  ) => {
-    console.log(e.target.checked, qid)
-    e.target.checked ? addQuestionId(qid) : removeQuestionId(qid);
+    window.location.href = "/dashboard/programs/assign";
   };
 
   if (!isLoading && !isError && !data) {
@@ -122,12 +106,14 @@ export default function ProgramAddForm() {
           {data ? (
             data.map((q) => {
               return (
-                <div key={q.qid} className="my-3 ml-2 flex flex-row gap-3">
-                  <input
-                    type="checkbox"
-                    onChange={(e) => onCheckboxChange(e, q.qid)}
-                  ></input>
-                  <label>{q.question}</label>
+                <div key={q.qid} className="m-3 border p-2">
+                  <Checkbox
+                    onClick={(e) => onCheckboxChange(q.qid, e)}
+                  ></Checkbox>
+                  &emsp;
+                  <label>
+                    {q.qid} - {q.question}
+                  </label>
                 </div>
               );
             })
