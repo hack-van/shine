@@ -83,6 +83,7 @@ function SurveyMultistepForm({ programs, uid }: { programs: Programs, uid: numbe
     <div className="flex flex-col w-full max-w-md py-8 px-4">
       {/* Header */}
       <h1 className="text-2xl font-bold">{programs[step]!.name}</h1>
+      <p className="text-muted-foreground text-xs">Please fill out the form below to record the results of the program</p>
       {/* Content */}
       <AnswerContext.Provider value={{ answer, setAnswer }}>
         <SurveyFromProgram id={programs[step]!.pid} />

@@ -27,6 +27,7 @@ export const surveyRouter = createTRPCRouter({
   postAnswer: publicProcedure
     .input(z.array(z.object({ pid: z.number(), qid: z.number(), uid: z.number(), content: z.number() })))
     .mutation(async ({ ctx, input }) => {
+      if (input.length === 0) return;
       return await ctx.db.insert(answers).values(input);
     }),
 })
