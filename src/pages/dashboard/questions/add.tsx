@@ -6,6 +6,7 @@ import { DashboardLayout } from "@/layouts/DashboardLayout";
 import QuestionSearch from "@/components/ui/QuestionSearch";
 import { api } from "@/utils/api";
 import ErrorPage from "next/error";
+import { useState } from "react";
 
 const questionSchema = z.object({
   title: z.string().nonempty({
@@ -16,11 +17,9 @@ const questionSchema = z.object({
 type QuestionSchema = z.infer<typeof questionSchema>;
 
 export default function AddPage() {
+
   const { data, isError, isLoading } = api.question.getAll.useQuery();
 
-  if (!isLoading && !isError && !data) {
-    return <ErrorPage statusCode={404} />;
-  }
   return (
     <DashboardLayout>
       <div className="flex flex-1 flex-col items-center justify-center">

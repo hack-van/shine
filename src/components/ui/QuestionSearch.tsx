@@ -7,7 +7,7 @@ const SearchResultWrapper = ({ question }) => {
   return (
     <div>
       <div className="flex w-full justify-between p-4">
-        <span className="inline-bloack w-auto">{question.question}</span>
+        <span className="inline-bloack w-auto">{question}</span>
         <div className="flex justify-between">
           <EditIcon className="mr-4" color="white" size={18} />
           <DeleteIcon className="mr-4" color="white" size={18} />
@@ -19,22 +19,27 @@ const SearchResultWrapper = ({ question }) => {
 };
 
 export default function QuestionSearch({ questions }) {
-  console.log(questions);
-
   const [searchInput, setSearchInput] = useState("");
-  const [filterQuestions, setFilterQuestions] = useState(questions);
+  const [filterQuestions, setFilterQuestions] = useState([]);
 
   const handleSearch = (e) => {
     e.preventDefault();
     setSearchInput(e.target.value);
   };
 
-  // useEffect(() => {
-  //   const filteredQuestions = questions.filter((question) => {
-  //     question.startsWith(searchInput);
-  //   });
-  //   setFilterQuestions(filteredQuestions);
-  // }, [searchInput]);
+  useEffect(() => {
+    const newQuestion = [];
+
+    questions.forEach((question) => {
+      if (
+        searchInput.length == 0 ||
+        question.question.startsWith(searchInput)
+      ) {
+        newQuestion.push(question.question);
+      }
+    });
+    setFilterQuestions(newQuestion);
+  }, [searchInput]);
 
   return (
     <div className="mt-10">
@@ -59,7 +64,7 @@ export default function QuestionSearch({ questions }) {
       </div>
 
       <div>
-        {questions.map((result, i) => (
+        {filterQuestions.map((result, i) => (
           <SearchResultWrapper key={i} question={result} />
         ))}
       </div>
