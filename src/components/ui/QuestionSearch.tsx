@@ -21,8 +21,18 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./dialog";
+import {
+  QuestionSchema,
+  questionSchema,
+} from "@/pages/dashboard/questions/add";
 
-const SearchResultWrapper = ({ question, qid }) => {
+const SearchResultWrapper = ({
+  question,
+  qid,
+}: {
+  question: string;
+  qid: number;
+}) => {
   const { mutate } = api.question.updateQuestion.useMutation();
 
   const [editQuestion, setEditQuestion] = useState("");
@@ -74,18 +84,24 @@ const SearchResultWrapper = ({ question, qid }) => {
   );
 };
 
-export default function QuestionSearch({ questions }) {
+export default function QuestionSearch({
+  questions,
+}: {
+  questions: QuestionSchema[];
+}) {
   const [searchInput, setSearchInput] = useState("");
-  const [filterQuestions, setFilterQuestions] = useState([]);
+  const [filterQuestions, setFilterQuestions] = useState<QuestionSchema[]>([]);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const handleSearch = (e) => {
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    setSearchInput(e.target.value);
+    if (e) {
+      setSearchInput(e?.target?.value);
+    }
   };
 
   useEffect(() => {
-    const newQuestion = [];
+    const newQuestion: QuestionSchema[] = [];
 
     questions.forEach((question) => {
       if (
@@ -124,7 +140,6 @@ export default function QuestionSearch({ questions }) {
       <div>
         {filterQuestions.map((result, i) => (
           <SearchResultWrapper
-            onOpenPopup={onOpen}
             key={i}
             qid={result.qid}
             question={result.question}

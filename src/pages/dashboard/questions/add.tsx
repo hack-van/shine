@@ -8,13 +8,14 @@ import { api } from "@/utils/api";
 import ErrorPage from "next/error";
 import { useState } from "react";
 
-const questionSchema = z.object({
-  title: z.string().nonempty({
+export const questionSchema = z.object({
+  qid: z.number(),
+  question: z.string().nonempty({
     message: "Required",
   }),
 });
 
-type QuestionSchema = z.infer<typeof questionSchema>;
+export type QuestionSchema = z.infer<typeof questionSchema>;
 
 export default function AddPage() {
 
@@ -29,7 +30,7 @@ export default function AddPage() {
           </CardHeader>
           <CardContent>
             <QuestionForm />
-            {!isLoading ? <QuestionSearch questions={data} /> : <div></div>}
+            {!isLoading && data ? <QuestionSearch questions={data} /> : <div></div>}
           </CardContent>
         </Card>
       </div>
