@@ -34,7 +34,7 @@ export const users = myPgTable("user", {
     .notNull()
     .default("worker"),
   hashPassword: varchar("hashPassword", { length: 255 }),
-  phoneNumber: varchar("phoneNumber", { length: 10 }).notNull()
+  phoneNumber: varchar("phoneNumber", { length: 10 }).notNull().default("")
 });
 
 export const programs = myPgTable("program", {
