@@ -1,13 +1,13 @@
 import { relations } from "drizzle-orm";
 import {
   index,
+  integer,
+  pgTableCreator,
   primaryKey,
+  serial,
   text,
   timestamp,
   varchar,
-  pgTableCreator,
-  integer,
-  serial,
 } from "drizzle-orm/pg-core";
 import { type AdapterAccount } from "next-auth/adapters";
 
@@ -19,17 +19,13 @@ import { type AdapterAccount } from "next-auth/adapters";
  */
 export const myPgTable = pgTableCreator((name) => `shine_${name}`);
 
-type Role = "admin" | "worker";
-
 export const users = myPgTable("user", {
   uid: serial("uid").primaryKey(),
   firstName: varchar("firstName", { length: 255 }),
   lastName: varchar("lastName", { length: 255 }),
-  email: varchar("email", { length: 255 }).notNull().unique(),
-  role: varchar("role", { length: 10 })
-    .$type<Role>()
-    .notNull()
-    .default("worker"),
+  email: varchar("email", { length: 255 }).unique(),
+  role: varchar("role", { length: 25 }),
+  phoneNumber: varchar("phoneNumber", { length: 10 }).notNull()
 });
 
 export const programs = myPgTable("program", {
@@ -177,3 +173,21 @@ export const verificationTokens = myPgTable(
     compoundKey: primaryKey(vt.identifier, vt.token),
   }),
 );
+
+export const answers = myPgTable("answer", {
+  aid: serial("aid").primaryKey(),
+  content: integer("content").notNull(),
+  pid: integer("pid").notNull(),
+  uid: integer("uid").notNull(),
+  qid: integer("qid").notNull(),
+  recoredAt: timestamp("recoredAt").notNull().defaultNow(),
+});
+
+export const answersRelations = relations(answers, ({ one }) => ({
+  user: one(users, { fields: [answers.uid], references: [users.uid] }),
+  program: one(programs, { fields: [answers.pid], references: [programs.pid] }),
+  question: one(questions, {
+    fields: [answers.qid],
+    references: [questions.qid],
+  }),
+}));

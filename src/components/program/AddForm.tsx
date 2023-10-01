@@ -34,15 +34,14 @@ export type ProgramSchema = z.infer<typeof programSchema>;
 
 export default function ProgramAddForm() {
   const { data, isError, isLoading } = api.question.getAll.useQuery();
+  const [ questionIds, setQuestionIds ] = useState<Set<number>>(new Set());
   const { mutate, data: inserted } = api.programs.createOneWithQuestions.useMutation();
-  const [questionIds, setQuestionIds] = useState<Set<number>>(new Set());
 
   const form = useForm<ProgramSchema>({
     resolver: zodResolver(programSchema),
   });
 
   const onHandleSubmit = (data: ProgramSchema) => {
-
     mutate({field: data, question_ids: [...questionIds]});
     window.location.href = "/dashboard/programs";
   };

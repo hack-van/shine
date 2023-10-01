@@ -44,4 +44,4 @@ export const questionRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       return await ctx.db.delete(questions).where(eq(questions.qid, input.qid));
     }),
-});
+})
