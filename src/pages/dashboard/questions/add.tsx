@@ -22,12 +22,10 @@ export default function AddPage() {
 
   return (
     <DashboardLayout>
-      <div className="flex flex-1 flex-col items-center justify-center">
+      <div className="flex flex-1 flex-col justify-center items-center">
         <Card className="w-full max-w-md">
           <CardHeader>
-            <h1 className="text-2xl font-bold tracking-tight">
-              Add Question Form
-            </h1>
+            <h1 className="text-2xl font-bold tracking-tight">Add Question Form</h1>
           </CardHeader>
           <CardContent>
             <QuestionForm />
@@ -35,6 +33,6 @@ export default function AddPage() {
           </CardContent>
         </Card>
       </div>
-    </DashboardLayout>
+    </DashboardLayout >
   );
 }

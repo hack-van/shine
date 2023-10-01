@@ -9,7 +9,6 @@ export const questionRouter = createTRPCRouter({
     // Get all questions
     return ctx.db.select().from(questions);
   }),
-
   createQuestion: publicProcedure
     .input(
       z.object({
@@ -45,4 +44,4 @@ export const questionRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       return await ctx.db.delete(questions).where(eq(questions.qid, input.qid));
     }),
-});
+})

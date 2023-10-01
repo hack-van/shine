@@ -1,11 +1,16 @@
 import { buttonVariants } from "@/components/ui/button";
 import { DashboardLayout } from "@/layouts/DashboardLayout";
 import Link from "next/link";
+import { api } from "@/utils/api";
+import { DataTable } from "@/components/data-table";
+import { userColumns } from "@/components/user/columns";
 
 export default function Page() {
+  const { data, isError, isLoading } = api.user.getAll.useQuery();
+
   return (
     <DashboardLayout>
-      <main className="mx-auto flex max-w-md flex-col justify-center gap-5 text-center">
+      <main className="m-10 flex max-w-md flex-col items-start gap-5">
         <div className="space-x-4">
           <Link
             href="users/add"
@@ -24,6 +29,11 @@ export default function Page() {
             Assign users
           </Link>
         </div>
+        {isLoading ? (
+          <p>No users found</p>
+        ) : (
+          <DataTable columns={userColumns} data={data!}/>
+        )}
       </main>
     </DashboardLayout>
   );

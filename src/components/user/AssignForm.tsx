@@ -1,7 +1,8 @@
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { Checkbox } from "@nextui-org/react";
+
 import {
   Form,
   FormControl,
@@ -9,9 +10,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "./ui/form";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
+} from "../ui/form";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 
 const userSchema = z.object({
   firstName: z.string().nonempty({
@@ -39,7 +40,9 @@ const userSchema = z.object({
 
 type UserSchema = z.infer<typeof userSchema>;
 
-export default function UserAddForm() {
+const programs = ["creativeLife", "Mentorship"];
+
+export default function UserAssignForm() {
   const form = useForm<UserSchema>({
     resolver: zodResolver(userSchema),
   });
@@ -86,51 +89,22 @@ export default function UserAddForm() {
         <FormField
           control={form.control}
           name="role"
-          render={({ field }) => (
+          render={({}) => (
             <FormItem>
-              <FormLabel>Role</FormLabel>
-              <FormControl>
-                <Input type="" placeholder="Place your role here" {...field} />
-              </FormControl>
+              <FormLabel>Programs</FormLabel>
+              <div className="flex flex-col ">
+                {programs.map((program, i) => (
+                  <Checkbox key={i} defaultSelected size="lg" color="success">
+                    {program}
+                  </Checkbox>
+                ))}
+              </div>
+
               <FormMessage />
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input
-                  type="email"
-                  placeholder="Place your email here"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <Input
-                  type="password"
-                  placeholder="Place your password here"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit">Submit</Button>
+        <Button type="submit">Assign</Button>
       </form>
     </Form>
   );

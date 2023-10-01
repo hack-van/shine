@@ -1,13 +1,23 @@
 import { buttonVariants } from "@/components/ui/button";
-import { api } from "@/utils/api";
+import { Link, NextUIProvider } from "@nextui-org/react";
 import { SparkleIcon } from "lucide-react";
+import { useSession } from "next-auth/react";
 import Head from "next/head";
-import Link from "next/link";
-import { NextUIProvider } from "@nextui-org/react";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 export default function Home() {
-  const hello = api.example.hello.useQuery({ text: "from tRPC" });
-  // const {data} = api.survey.getSurveyInfo.useQuery({pid: 3})
+  const { data: session } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (session?.user.role === "admin") {
+      void router.replace("/dashboard")
+    } else {
+      void router.replace("/login")
+    }
+  }, []);
+
 
   return (
     <NextUIProvider>

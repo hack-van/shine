@@ -6,17 +6,22 @@ import { api } from "@/utils/api";
 import Link from "next/link";
 import { DataTable } from "@/components/data-table";
 import { programColumns } from "@/components/program/columns";
+import { useState } from "react";
+import { SelectedProgram } from "@/components/program/Selected";
+import { programs } from "@/server/db/schema";
 
 export default function Page() {
   const { data, isError, isLoading } = api.programs.getAll.useQuery();
-
+  const [selectedProgram, setSelectedProgram] = useState<
+    typeof programs.$inferSelect | null
+  >(null);
   if (isError) {
     return <ErrorPage statusCode={404} />;
   }
 
   return (
     <DashboardLayout>
-      <main className="m-10 flex max-w-md flex-col items-start gap-5">
+      <main className="m-10 flex flex-col items-start gap-5">
         <Link
           href="programs/add"
           className={buttonVariants({
@@ -25,12 +30,27 @@ export default function Page() {
         >
           Add program
         </Link>
-        All programs
-        {isLoading ? (
-          <p>No program found</p>
-        ) : (
-          <DataTable columns={programColumns} data={data} />
-        )}
+
+        <div className="flex w-full flex-col justify-center gap-5 md:flex-row">
+          <div className="flex-1 basis-0">
+            {isLoading ? (
+              <p>No program found</p>
+            ) : (
+              <DataTable
+                columns={programColumns}
+                data={data}
+                setSelectedData={setSelectedProgram}
+              />
+            )}
+          </div>
+          {selectedProgram ? (
+            <div className="flex-1 basis-0">
+              <SelectedProgram id={selectedProgram.pid} />
+            </div>
+          ) : (
+            <div className="flex-1 basis-0"></div>
+          )}
+        </div>
       </main>
     </DashboardLayout>
   );
