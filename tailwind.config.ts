@@ -54,6 +54,8 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        dashboard: "#151D25",
+        destructiveButton: "#EEAFAF",
       },
       borderRadius: {
         lg: "var(--radius)",
