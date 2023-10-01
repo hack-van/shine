@@ -4,10 +4,6 @@ import { api } from "@/utils/api";
 
 export const programColumns: ColumnDef<typeof programs.$inferSelect>[] = [
   {
-    accessorKey: "pid",
-    header: "ID",
-  },
-  {
     accessorKey: "name",
     header: "Name",
   },

@@ -14,6 +14,7 @@ import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
 import { api } from "@/utils/api";
 import ErrorPage from "next/error";
+import { redirect, useRouter } from "next/navigation";
 
 export const programSchema = z.object({
   name: z.string().nonempty({
@@ -27,14 +28,17 @@ export type ProgramSchema = z.infer<typeof programSchema>;
 
 export default function ProgramAddForm() {
   const { data, isError, isLoading } = api.question.getAll.useQuery();
+  const { mutate } = api.programs.createOne.useMutation();
+  const router = useRouter();
+
   const form = useForm<ProgramSchema>({
     resolver: zodResolver(programSchema),
   });
   const onHandleSubmit = (data: ProgramSchema) => {
-    console.log("LAH", data)
-    api.programs.createOne.useQuery({data});
-    return;
-  }
+    mutate(data);
+    window.location.href = "/dashboard/programs"
+    // useRouter("/dashboard/programs") do not refresh the state
+  };
 
   if (!isLoading && !isError && !data) {
     return <ErrorPage statusCode={404} />;
@@ -48,7 +52,7 @@ export default function ProgramAddForm() {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Program name</FormLabel>
+              <FormLabel>Program name (required)</FormLabel>
               <FormControl>
                 <Input
                   type="text"
@@ -65,7 +69,7 @@ export default function ProgramAddForm() {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Description </FormLabel>
+              <FormLabel>Description (optional)</FormLabel>
               <FormControl>
                 <Input
                   type="text"
@@ -82,7 +86,7 @@ export default function ProgramAddForm() {
           name="location"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Location</FormLabel>
+              <FormLabel>Location (required)</FormLabel>
               <FormControl>
                 <Input
                   type="text"
