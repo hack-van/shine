@@ -4,7 +4,7 @@ import Link from "next/link";
 import { api } from "@/utils/api";
 import { DataTable } from "@/components/data-table";
 import { userColumns } from "@/components/user/columns";
-import { UserSelectedPrograms, userSelectedPrograms, userSelectedQuestions } from "@/components/user/Selected";
+import { UserSelectedPrograms } from "@/components/user/Selected";
 import { users } from "@/server/db/schema";
 import { useState } from "react";
 
