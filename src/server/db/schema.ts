@@ -8,6 +8,7 @@ import {
   text,
   timestamp,
   varchar,
+  uuid
 } from "drizzle-orm/pg-core";
 import { type AdapterAccount } from "next-auth/adapters";
 
@@ -23,6 +24,8 @@ type Role = "admin" | "worker";
 
 export const users = myPgTable("user", {
   uid: serial("uid").primaryKey(),
+  id: uuid("uuid").notNull().defaultRandom(),
+  name: varchar("name"),
   firstName: varchar("firstName", { length: 255 }),
   lastName: varchar("lastName", { length: 255 }),
   email: varchar("email", { length: 255 }).notNull().unique(),
@@ -30,6 +33,8 @@ export const users = myPgTable("user", {
     .$type<Role>()
     .notNull()
     .default("worker"),
+  hashPassword: varchar("hashPassword", { length: 255 }),
+  image: varchar("image", { length: 255 })
 });
 
 export const programs = myPgTable("program", {
