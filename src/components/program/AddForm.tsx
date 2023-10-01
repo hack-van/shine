@@ -37,7 +37,7 @@ export default function ProgramAddForm() {
   const { mutate, data: inserted } = api.programs.createOneWithQuestions.useMutation();
   const [questionIds, setQuestionIds] = useState<Set<number>>(new Set());
 
-  const form = useForm<programSchema>({
+  const form = useForm<ProgramSchema>({
     resolver: zodResolver(programSchema),
   });
 
