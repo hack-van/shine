@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { integer, primaryKey, serial, timestamp, varchar } from "drizzle-orm/pg-core";
+import { integer, primaryKey, serial, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 import { myPgTable } from "./table";
 import { accounts, users } from "./users";
 
@@ -66,9 +66,9 @@ export const programsRelations = relations(programs, ({ many }) => ({
 export const usersToPrograms = myPgTable(
   "users_to_programs",
   {
-    uid: integer("uid")
+    uid: uuid("uid")
       .notNull()
-      .references(() => users.uid),
+      .references(() => users.id),
     pid: integer("pid")
       .notNull()
       .references(() => programs.pid),
@@ -87,7 +87,7 @@ export const usersToProgramsRelation = relations(
     }),
     program: one(users, {
       fields: [usersToPrograms.uid],
-      references: [users.uid],
+      references: [users.id],
     }),
   }),
 );

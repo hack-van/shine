@@ -3,10 +3,10 @@ import {
   index,
   integer,
   primaryKey,
-  serial,
   text,
   timestamp,
-  varchar,
+  uuid,
+  varchar
 } from "drizzle-orm/pg-core";
 import { type AdapterAccount } from "next-auth/adapters";
 import { myPgTable } from "./table";
@@ -14,14 +14,17 @@ import { myPgTable } from "./table";
 type Role = "admin" | "worker";
 
 export const users = myPgTable("user", {
-  uid: serial("uid").primaryKey(),
+  id: uuid("uid").notNull().defaultRandom().primaryKey(),
+  name: varchar("name"),
   firstName: varchar("firstName", { length: 255 }),
   lastName: varchar("lastName", { length: 255 }),
   email: varchar("email", { length: 255 }).notNull().unique(),
+  hashPassword: varchar("hashPassword", { length: 255 }).notNull(),
   role: varchar("role", { length: 10 })
     .$type<Role>()
     .notNull()
     .default("worker"),
+  image: varchar("image", { length: 255 }),
 });
 
 export const accounts = myPgTable(
@@ -48,7 +51,7 @@ export const accounts = myPgTable(
 );
 
 export const accountsRelations = relations(accounts, ({ one }) => ({
-  user: one(users, { fields: [accounts.userId], references: [users.uid] }),
+  user: one(users, { fields: [accounts.userId], references: [users.id] }),
 }));
 
 export const sessions = myPgTable(
@@ -66,7 +69,7 @@ export const sessions = myPgTable(
 );
 
 export const sessionsRelations = relations(sessions, ({ one }) => ({
-  user: one(users, { fields: [sessions.userId], references: [users.uid] }),
+  user: one(users, { fields: [sessions.userId], references: [users.id] }),
 }));
 
 export const verificationTokens = myPgTable(

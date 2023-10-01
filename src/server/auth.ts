@@ -1,12 +1,20 @@
+import { env } from "@/env.mjs";
 import { db } from "@/server/db";
-import { myPgTable } from "@/server/db/schema";
+import { myPgTable } from "@/server/db/schema/table";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
+import bcrypt from "bcrypt";
+import { eq } from "drizzle-orm";
 import { type GetServerSidePropsContext } from "next";
 import {
   getServerSession,
   type DefaultSession,
   type NextAuthOptions,
 } from "next-auth";
+import { type DefaultJWT } from "next-auth/jwt";
+import Credentials from "next-auth/providers/credentials";
+import { users } from "./db/schema/users";
+
+type WithSession = Pick<typeof users.$inferSelect, "id" | "role">;
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -16,17 +24,12 @@ import {
  */
 declare module "next-auth" {
   interface Session extends DefaultSession {
-    user: {
-      id: string;
-      // ...other properties
-      // role: UserRole;
-    } & DefaultSession["user"];
+    user: WithSession & DefaultSession["user"];
   }
+}
 
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
+declare module "next-auth/jwt" {
+  interface JWT extends DefaultJWT, WithSession { }
 }
 
 /**
@@ -35,14 +38,26 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authOptions: NextAuthOptions = {
+  pages: {
+    signIn: "/login",
+  },
+  session: {
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+    updateAge: 24 * 60 * 60, // 24 hours
+  },
+  secret: env.NEXTAUTH_SECRET,
   callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-      },
-    }),
+    jwt: ({ token, user }) => {
+      return {
+        ...token,
+        ...user
+      };
+    },
+    session: ({ session, token }) => {
+      session.user.id = token.id;
+      return session
+    },
   },
   adapter: DrizzleAdapter(db, myPgTable),
   providers: [
@@ -55,6 +70,27 @@ export const authOptions: NextAuthOptions = {
      *
      * @see https://next-auth.js.org/providers/github
      */
+    Credentials({
+      name: "Credentials",
+      credentials: {
+        email: { label: "Username", type: "email", placeholder: "name@example.com" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials.password) {
+          return null;
+        }
+
+        // SELECT * FROM users WHERE email = credentials.email LIMIT 1;
+        const result = await db.select().from(users).limit(1).where(eq(users.email, credentials.email));
+
+        const user = result.at(0);
+        if (!user) return null;
+        const passwordMatch = await bcrypt.compare(credentials.password, user.hashPassword);
+        if (passwordMatch) return user;
+        return null;
+      }
+    }),
   ],
 };
 
