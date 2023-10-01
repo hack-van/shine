@@ -5,9 +5,11 @@ import { useRouter } from "next/router";
 
 import { SurveyFromProgram } from "@/components/SurveyForm";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 import AnswerContext, { type Answer } from "@/context/answer";
 import type { inferRouterOutputs } from '@trpc/server';
 import { useState } from "react";
+
 type Programs = inferRouterOutputs<AppRouter>["survey"]["getProgramsByUserId"]["programs"];
 
 export default function Page() {
@@ -29,11 +31,17 @@ export default function Page() {
 }
 
 function SurveyMultistepForm({ programs }: { programs: Programs }) {
+  const { toast } = useToast()
   const [answer, setAnswer] = useState<Answer>({})
   const [step, setStep] = useState(0);
   const next = () => setStep(step => Math.min(step + 1, programs.length - 1))
   const prev = () => setStep(step => Math.max(step - 1, 0));
-  const submit = () => console.log(answer)
+  const submit = () => {
+    console.log(answer)
+    toast({
+      title: "Thank you for your submission"
+    })
+  }
 
 
   return <main className="flex flex-col min-h-screen items-center">
