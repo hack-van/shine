@@ -1,9 +1,16 @@
-import { answers, programs, programsToQuestions, questions, usersToPrograms } from "@/server/db/schema";
+import { answers, programs, programsToQuestions, questions, tokens, usersToPrograms } from "@/server/db/schema";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 
 export const surveyRouter = createTRPCRouter({
+  getUserIdfromToken: publicProcedure
+    .input(z.object({ token: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const questionsResult = await ctx.db.select({ uid: tokens.uid }).from(tokens)
+        .where(eq(tokens.token, input.token));
+      return questionsResult.at(0);
+    }),
   getQuestionsByProgramId: publicProcedure
     .input(z.object({ id: z.number() }))
     .query(async ({ ctx, input }) => {

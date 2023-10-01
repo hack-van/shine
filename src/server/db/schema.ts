@@ -7,8 +7,8 @@ import {
   serial,
   text,
   timestamp,
-  varchar,
-  uuid
+  uuid,
+  varchar
 } from "drizzle-orm/pg-core";
 import { type AdapterAccount } from "next-auth/adapters";
 
@@ -195,3 +195,8 @@ export const answersRelations = relations(answers, ({ one }) => ({
     references: [questions.qid],
   }),
 }));
+
+export const tokens = myPgTable("token", {
+  token: uuid("token").primaryKey().defaultRandom(),
+  uid: integer("uid").notNull().references(() => users.uid),
+})
