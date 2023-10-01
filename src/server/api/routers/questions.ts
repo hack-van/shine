@@ -1,4 +1,4 @@
-import { questions } from "@/server/db/schema";
+import { questions } from "@/server/db/schema/data";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "../trpc";
