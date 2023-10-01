@@ -8,31 +8,37 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "./ui/form";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
-import { Checkbox } from "./ui/checkbox";
+} from "../ui/form";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { Checkbox } from "../ui/checkbox";
 import { api } from "@/utils/api";
 import ErrorPage from "next/error";
+import { redirect, useRouter } from "next/navigation";
 
-const programSchema = z.object({
+export const programSchema = z.object({
   name: z.string().nonempty({
     message: "Required",
   }),
   description: z.string(),
-  startTime: z.string(),
-  endTime: z.string(),
-  questions: z.string().array(),
-  users: z.string().array(),
+  location: z.string(),
 });
 
-type ProgramSchema = z.infer<typeof programSchema>;
+export type ProgramSchema = z.infer<typeof programSchema>;
 
 export default function ProgramAddForm() {
   const { data, isError, isLoading } = api.question.getAll.useQuery();
+  const { mutate } = api.programs.createOne.useMutation();
+  const router = useRouter();
+
   const form = useForm<ProgramSchema>({
     resolver: zodResolver(programSchema),
   });
+  const onHandleSubmit = (data: ProgramSchema) => {
+    mutate(data);
+    window.location.href = "/dashboard/programs"
+    // useRouter("/dashboard/programs") do not refresh the state
+  };
 
   if (!isLoading && !isError && !data) {
     return <ErrorPage statusCode={404} />;
@@ -40,13 +46,13 @@ export default function ProgramAddForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(console.log)} className="grid gap-2">
+      <form onSubmit={form.handleSubmit(onHandleSubmit)} className="grid gap-2">
         <FormField
           control={form.control}
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Program name</FormLabel>
+              <FormLabel>Program name (required)</FormLabel>
               <FormControl>
                 <Input
                   type="text"
@@ -63,7 +69,7 @@ export default function ProgramAddForm() {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Description </FormLabel>
+              <FormLabel>Description (optional)</FormLabel>
               <FormControl>
                 <Input
                   type="text"
@@ -77,31 +83,14 @@ export default function ProgramAddForm() {
         />
         <FormField
           control={form.control}
-          name="startTime"
+          name="location"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Start time</FormLabel>
+              <FormLabel>Location (required)</FormLabel>
               <FormControl>
                 <Input
-                  type="date"
-                  placeholder="Place your role here"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="endTime"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>End time</FormLabel>
-              <FormControl>
-                <Input
-                  type="date"
-                  placeholder="Place your role here"
+                  type="text"
+                  placeholder="Place the program location here"
                   {...field}
                 />
               </FormControl>
@@ -114,7 +103,7 @@ export default function ProgramAddForm() {
           {data ? (
             data.map((q) => {
               return (
-                <div key={q.qid} className="border p-2 m-3">
+                <div key={q.qid} className="m-3 border p-2">
                   <Checkbox></Checkbox>
                   &emsp;
                   <label>
@@ -127,7 +116,6 @@ export default function ProgramAddForm() {
             <>No question found</>
           )}
         </div>
-
         <Button type="submit">Submit</Button>
       </form>
     </Form>
