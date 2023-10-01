@@ -6,6 +6,7 @@ import { type AppType } from "next/app";
 import { api } from "@/utils/api";
 
 import "@/styles/globals.css";
+import { NextUIProvider } from "@nextui-org/react";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -13,8 +14,10 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      <Component {...pageProps} />
-      <Toaster />
+      <NextUIProvider>
+        <Component {...pageProps} />
+        <Toaster />
+      </NextUIProvider>
     </SessionProvider>
   );
 };
