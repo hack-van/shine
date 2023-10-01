@@ -22,6 +22,7 @@ export default function Page() {
   return (
     <DashboardLayout>
       <main className="m-10 flex flex-col items-start gap-5">
+        
         <Link
           href="programs/add"
           className={buttonVariants({
@@ -43,13 +44,13 @@ export default function Page() {
               />
             )}
           </div>
-          {selectedProgram ? (
-            <div className="flex-1 basis-0">
+          <div className="flex-1 basis-0">
+            {selectedProgram ? (
               <SelectedProgram id={selectedProgram.pid} />
-            </div>
-          ) : (
-            <div className="flex-1 basis-0"></div>
-          )}
+            ) : (
+              <></>
+            )}
+          </div>
         </div>
       </main>
     </DashboardLayout>

@@ -3,7 +3,6 @@ import ErrorPage from "next/error";
 import { Card, CardContent, CardDescription, CardTitle } from "../ui/card";
 
 export const SelectedProgram = ({ id }: { id: number }) => {
-  console.log("ID", id);
   const {
     data: programToQuestions,
     isError: isError1,
@@ -41,7 +40,9 @@ export const SelectedProgram = ({ id }: { id: number }) => {
         {selectedQuestions && selectedQuestions.length > 0 ? (
           <div className="flex flex-col gap-2">
             <h3>Program related questions</h3>
-            <ol>{selectedQuestions?.map((q) => <li key={q.qid}>{q.question}</li>)}</ol>
+            <ol>
+              {selectedQuestions?.map((q) => <li key={q.qid}>{q.question}</li>)}
+            </ol>
           </div>
         ) : (
           <>No questions found</>
