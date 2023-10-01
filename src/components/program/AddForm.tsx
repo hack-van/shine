@@ -17,6 +17,11 @@ import ErrorPage from "next/error";
 import { useState } from "react";
 import { SettingsUpdateListInstance } from "twilio/lib/rest/supersim/v1/settingsUpdate";
 
+export const programToQuestionSchema = z.object({
+  pid: z.number(),
+  qid: z.number()
+})
+
 export const programSchema = z.object({
   name: z.string().nonempty({
     message: "Required",
@@ -29,16 +34,19 @@ export type ProgramSchema = z.infer<typeof programSchema>;
 
 export default function ProgramAddForm() {
   const { data, isError, isLoading } = api.question.getAll.useQuery();
-  const { mutate } = api.programs.createOne.useMutation();
+  const { mutate, data: inserted } = api.programs.createOneWithQuestions.useMutation();
   const [questionIds, setQuestionIds] = useState<Set<number>>(new Set());
 
   const form = useForm<programSchema>({
     resolver: zodResolver(programSchema),
   });
 
-  const onHandleSubmit = (data: ProgramSchema) => {
-    mutate(data);
-    window.location.href = "/dashboard/programs";
+  const onHandleSubmit = async (data: ProgramSchema) => {
+    // programToQuestionSchema._processInputParams
+    
+    console.log(questionIds)
+    await mutate({field: data, question_ids: [...questionIds]});
+    // window.location.href = "/dashboard/programs";
   };
 
   const removeQuestionId = (idDel: number) => {
@@ -55,7 +63,6 @@ export default function ProgramAddForm() {
     e: React.ChangeEvent<HTMLInputElement>,
     qid: number,
   ) => {
-    console.log(e.target.checked, qid)
     e.target.checked ? addQuestionId(qid) : removeQuestionId(qid);
   };
 
