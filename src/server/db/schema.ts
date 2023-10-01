@@ -1,13 +1,13 @@
 import { relations } from "drizzle-orm";
 import {
   index,
+  integer,
+  pgTableCreator,
   primaryKey,
+  serial,
   text,
   timestamp,
   varchar,
-  pgTableCreator,
-  integer,
-  serial,
 } from "drizzle-orm/pg-core";
 import { type AdapterAccount } from "next-auth/adapters";
 
@@ -177,3 +177,21 @@ export const verificationTokens = myPgTable(
     compoundKey: primaryKey(vt.identifier, vt.token),
   }),
 );
+
+export const answers = myPgTable("answer", {
+  aid: serial("aid").primaryKey(),
+  content: integer("content").notNull(),
+  pid: integer("pid").notNull(),
+  uid: integer("uid").notNull(),
+  qid: integer("qid").notNull(),
+  recoredAt: timestamp("recoredAt").notNull().defaultNow(),
+});
+
+export const answersRelations = relations(answers, ({ one }) => ({
+  user: one(users, { fields: [answers.uid], references: [users.uid] }),
+  program: one(programs, { fields: [answers.pid], references: [programs.pid] }),
+  question: one(questions, {
+    fields: [answers.qid],
+    references: [questions.qid],
+  }),
+}));
