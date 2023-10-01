@@ -8,25 +8,24 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "./ui/form";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
-import { Checkbox } from "./ui/checkbox";
+} from "../ui/form";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { Checkbox } from "../ui/checkbox";
 import { api } from "@/utils/api";
 import ErrorPage from "next/error";
 
-const programSchema = z.object({
+export const programSchema = z.object({
   name: z.string().nonempty({
     message: "Required",
   }),
   description: z.string(),
-  startTime: z.string(),
-  endTime: z.string(),
+  location: z.string(),
   questions: z.string().array(),
   users: z.string().array(),
 });
 
-type ProgramSchema = z.infer<typeof programSchema>;
+export type ProgramSchema = z.infer<typeof programSchema>;
 
 export default function ProgramAddForm() {
   const { data, isError, isLoading } = api.question.getAll.useQuery();
@@ -77,31 +76,14 @@ export default function ProgramAddForm() {
         />
         <FormField
           control={form.control}
-          name="startTime"
+          name="location"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Start time</FormLabel>
               <FormControl>
                 <Input
-                  type="date"
-                  placeholder="Place your role here"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="endTime"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>End time</FormLabel>
-              <FormControl>
-                <Input
-                  type="date"
-                  placeholder="Place your role here"
+                  type="text"
+                  placeholder="Place the program location here"
                   {...field}
                 />
               </FormControl>

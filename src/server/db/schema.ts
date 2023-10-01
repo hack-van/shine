@@ -36,7 +36,7 @@ export const programs = myPgTable("program", {
   pid: serial("pid").primaryKey(),
   description: varchar("description", { length: 255 }),
   name: varchar("name", { length: 255 }),
-  time: timestamp("time").notNull(),
+  location: varchar("location").notNull(),
 });
 
 export const questions = myPgTable("question", {
