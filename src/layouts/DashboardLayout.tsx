@@ -1,5 +1,6 @@
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -34,7 +35,7 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
           {item}
         </Link>
       ))}
-      <Button variant="destructive" className="mt-auto">Log out</Button>
+      <Button variant="destructive" className="mt-auto" onClick={() => signOut({ callbackUrl: "/login" })}>Log out</Button>
     </nav>
     <main className="flex-1 h-screen overflow-auto py-4 px-8 ml-[250px]">
       {children}
