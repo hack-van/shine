@@ -41,9 +41,9 @@ export default function ProgramAddForm() {
     resolver: zodResolver(programSchema),
   });
 
-  const onHandleSubmit = async (data: ProgramSchema) => {
+  const onHandleSubmit = (data: ProgramSchema) => {
 
-    await mutate({field: data, question_ids: [...questionIds]});
+    mutate({field: data, question_ids: [...questionIds]});
     window.location.href = "/dashboard/programs";
   };
 

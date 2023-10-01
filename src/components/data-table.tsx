@@ -15,13 +15,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { SetStateAction } from "react"
+import { Dispatch, SetStateAction } from "react"
 import { useRouter } from "next/router"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[],
-  setSelectedData: any
+  setSelectedData: Dispatch<SetStateAction<TData | null>>
 }
 
 export function DataTable<TData, TValue>({

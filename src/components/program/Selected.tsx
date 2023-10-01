@@ -37,7 +37,6 @@ export const SelectedProgram = ({ id }: { id: number }) => {
     return <ErrorPage statusCode={404} />;
   }
 
-  console.log("HH", selectedQuestions);
   return (
     <Card className="flex flex-col items-start gap-5 p-5">
       <CardTitle>{program?.name}</CardTitle>
@@ -48,7 +47,7 @@ export const SelectedProgram = ({ id }: { id: number }) => {
         {selectedQuestions && selectedQuestions.length > 0 ? (
           <div className="flex flex-col gap-2">
             <h3>Program related questions</h3>
-            <ol>{selectedQuestions?.map((q) => <li>{q.question}</li>)}</ol>
+            <ol>{selectedQuestions?.map((q) => <li key={q.qid}>{q.question}</li>)}</ol>
           </div>
         ) : (
           <>No questions found</>

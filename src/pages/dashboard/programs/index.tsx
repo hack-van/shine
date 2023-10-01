@@ -6,12 +6,8 @@ import { api } from "@/utils/api";
 import Link from "next/link";
 import { DataTable } from "@/components/data-table";
 import { programColumns } from "@/components/program/columns";
-import { useEffect, useState } from "react";
-import { ProgramSchema } from "@/components/program/AddForm";
+import { useState } from "react";
 import { SelectedProgram } from "@/components/program/Selected";
-import { useRouter } from "next/router";
-import { select } from "@nextui-org/react";
-import { isNumber } from "tailwind-merge/dist/lib/validators";
 import { programs } from "@/server/db/schema";
 
 export default function Page() {
@@ -22,7 +18,6 @@ export default function Page() {
   if (isError) {
     return <ErrorPage statusCode={404} />;
   }
-  const router = useRouter();
 
   return (
     <DashboardLayout>
