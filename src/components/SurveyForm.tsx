@@ -21,7 +21,7 @@ export const SurveyFromProgram = ({ id }: { id: number }) => {
 
   return data.questions.map(q => (
     <div key={`${id}#${q.qid}`} className="flex gap-2 items-center py-4">
-      <Label className="flex-1" htmlFor={`${id}#${q.qid}`}>{q.question}</Label>
+      <Label className="flex-1" htmlFor={`${id}#${q.qid}`}>How many {q.question}?</Label>
       <Input
         type="number"
         id={`${id}#${q.qid}`}
