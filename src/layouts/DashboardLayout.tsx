@@ -8,7 +8,7 @@ import logo from "../assets/logo.png";
 import { lato } from "@/components/ui/font";
 import YouthIcon from "../assets/youth-worker.svg";
 
-const features = ["youth Workers", "questions", "programs", "reports"];
+const features = ["users", "questions", "programs"];
 
 export const DashboardLayout = ({
   children,
