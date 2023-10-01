@@ -1,9 +1,8 @@
 import { users } from "@/server/db/schema";
-import { TRPCError } from "@trpc/server";
-import bcrypt from "bcrypt";
-import { eq } from "drizzle-orm";
-import { z } from "zod";
+
+import { userSchema } from "@/components/user/AddForm";
 import { createTRPCRouter, publicProcedure } from "../trpc";
+
 
 export const userRouter = createTRPCRouter({
   getAll: publicProcedure
@@ -11,25 +10,19 @@ export const userRouter = createTRPCRouter({
       // Get all users
       return ctx.db.select().from(users)
     }),
-  addOne: publicProcedure
-    .input(z.object({
-      email: z.string().email(),
-      password: z.string(),
-    }))
-    .mutation(async ({ ctx, input }) => {
-      // Find a user
-      const result = await ctx.db.select().from(users).where(eq(users.email, input.email));
-      if (result.at(0)) {
-        throw new TRPCError({
-          message: "User already exists",
-          code: "CONFLICT",
-        })
-      }
-
-      const hashPassword = await bcrypt.hash(input.password, 10);
-      return ctx.db.insert(users).values({
+  createOne: publicProcedure.input(userSchema).mutation(async ({ ctx, input }) => {
+    try {
+      const result = await ctx.db.insert(users).values({
+        firstName: input.firstName,
+        lastName: input.lastName,
         email: input.email,
-        hashPassword,
+        role: "worker",
+        phoneNumber: input.phoneNumber,
       })
-    })
+      return result;
+    } catch (error) {
+      console.error("Error creating one:", error);
+      throw error;
+    }
+  })
 })

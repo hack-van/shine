@@ -12,6 +12,8 @@ import {
 } from "drizzle-orm/pg-core";
 import { type AdapterAccount } from "next-auth/adapters";
 
+type Role = "worker" | "admin";
+
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
  * database instance for multiple projects.
@@ -19,8 +21,6 @@ import { type AdapterAccount } from "next-auth/adapters";
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
 export const myPgTable = pgTableCreator((name) => `shine_${name}`);
-
-type Role = "admin" | "worker";
 
 export const users = myPgTable("user", {
   uid: serial("uid").primaryKey(),
@@ -34,7 +34,7 @@ export const users = myPgTable("user", {
     .notNull()
     .default("worker"),
   hashPassword: varchar("hashPassword", { length: 255 }),
-  image: varchar("image", { length: 255 })
+  phoneNumber: varchar("phoneNumber", { length: 10 }).notNull()
 });
 
 export const programs = myPgTable("program", {
@@ -81,11 +81,6 @@ export const programsToQuestionsRelation = relations(
 export const questionRelations = relations(questions, ({ many }) => ({
   programs: many(programsToQuestions),
 }));
-
-export const answer = myPgTable("answer", {
-  aid: serial("aid").primaryKey(),
-  value: varchar("value", { length: 255 }),
-});
 
 export const usersRelations = relations(users, ({ many }) => ({
   accounts: many(accounts),
