@@ -22,7 +22,13 @@ import {
   DialogTrigger,
 } from "./dialog";
 
-const SearchResultWrapper = ({ question, qid }) => {
+const SearchResultWrapper = ({
+  question,
+  qid,
+}: {
+  question: string;
+  qid: number;
+}) => {
   const { mutate } = api.question.updateQuestion.useMutation();
 
   const [editQuestion, setEditQuestion] = useState("");
