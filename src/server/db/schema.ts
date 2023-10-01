@@ -77,11 +77,6 @@ export const questionRelations = relations(questions, ({ many }) => ({
   programs: many(programsToQuestions),
 }));
 
-export const answer = myPgTable("answer", {
-  aid: serial("aid").primaryKey(),
-  value: varchar("value", { length: 255 }),
-});
-
 export const usersRelations = relations(users, ({ many }) => ({
   accounts: many(accounts),
   programs: many(usersToPrograms),
