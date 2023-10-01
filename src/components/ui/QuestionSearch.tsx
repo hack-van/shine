@@ -37,7 +37,7 @@ const SearchResultWrapper = ({
 
   const [editQuestion, setEditQuestion] = useState("");
 
-  const handleEdit = (e) => {
+  const handleEdit = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setEditQuestion(e.target.value);
   };
