@@ -12,6 +12,7 @@ import {
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { api } from "@/utils/api";
+import { useState } from "react";
 
 export const userSchema = z.object({
   firstName: z.string().nonempty({
@@ -37,15 +38,34 @@ export const userSchema = z.object({
 type UserSchema = z.infer<typeof userSchema>;
 
 export default function UserAddForm() {
+  const { data, isError, isLoading } = api.programs.getAll.useQuery();
+  const [programIds, setProgramIds] = useState<Set<number>>(new Set());
+  const { mutate } = api.user.createOneWithPrograms.useMutation();
+
   const form = useForm<UserSchema>({
     resolver: zodResolver(userSchema),
   });
-  
-  const { mutate } = api.user.createOne.useMutation();
 
   const onHandleSubmit = (data: UserSchema) => {
-    mutate(data);
+    mutate({ field: data, program_ids: [...programIds] });
     window.location.href = "/dashboard/users";
+  };
+
+  const removeProgramId = (idDel: number) => {
+    setProgramIds(
+      (programIds) => new Set([...programIds].filter((id) => id !== idDel)),
+    );
+  };
+
+  const addProgramId = (idAdd: number) => {
+    setProgramIds((programIds) => new Set(programIds.add(idAdd)));
+  };
+
+  const onCheckboxChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    qid: number,
+  ) => {
+    e.target.checked ? addProgramId(qid) : removeProgramId(qid);
   };
 
   return (
@@ -99,7 +119,13 @@ export default function UserAddForm() {
             <FormItem>
               <FormLabel>Phone number</FormLabel>
               <FormControl>
-                <Input type="text" placeholder="required" maxLength={15} required {...field} />
+                <Input
+                  type="text"
+                  placeholder="required"
+                  maxLength={15}
+                  required
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -118,6 +144,24 @@ export default function UserAddForm() {
             </FormItem>
           )}
         />
+        <div>
+          <p>Selected programs</p>
+          {data ? (
+            data.map((p) => {
+              return (
+                <div key={p.pid} className="my-3 ml-2 flex flex-row gap-3">
+                  <input
+                    type="checkbox"
+                    onChange={(e) => onCheckboxChange(e, p.pid)}
+                  ></input>
+                  <label>{p.name} - {p.location}</label>
+                </div>
+              );
+            })
+          ) : (
+            <>No question found</>
+          )}
+        </div>
         <Button type="submit">Submit</Button>
       </form>
     </Form>
