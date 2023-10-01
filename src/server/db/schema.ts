@@ -19,17 +19,13 @@ import { type AdapterAccount } from "next-auth/adapters";
  */
 export const myPgTable = pgTableCreator((name) => `shine_${name}`);
 
-type Role = "admin" | "worker";
-
 export const users = myPgTable("user", {
   uid: serial("uid").primaryKey(),
   firstName: varchar("firstName", { length: 255 }),
   lastName: varchar("lastName", { length: 255 }),
-  email: varchar("email", { length: 255 }).notNull().unique(),
-  role: varchar("role", { length: 10 })
-    .$type<Role>()
-    .notNull()
-    .default("worker"),
+  email: varchar("email", { length: 255 }).unique(),
+  role: varchar("role", { length: 25 }),
+  phoneNumber: varchar("phoneNumber", { length: 10 }).notNull()
 });
 
 export const programs = myPgTable("program", {
