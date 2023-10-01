@@ -93,7 +93,7 @@ export default function QuestionSearch({
   const [filterQuestions, setFilterQuestions] = useState<QuestionSchema[]>([]);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearch = (e: any) => {
     e.preventDefault();
     if (e) {
       setSearchInput(e?.target?.value);
