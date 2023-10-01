@@ -5,42 +5,64 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import logo from "../assets/logo.png";
+import { lato } from "@/components/ui/font";
+import YouthIcon from "../assets/youth-worker.svg";
 
-const features = ["programs", "questions", "users"];
+const features = ["users", "questions", "programs"];
 
-export const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
+export const DashboardLayout = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const router = useRouter();
 
-  return <>
-    <nav className="fixed h-screen flex flex-col border-r p-4 w-[250px]">
-      <Link
-        href="/dashboard"
-        className="font-xl inline-flex font-semibold tracking-tight pb-4"
-      >
-        <Image
-          src={logo}
-          alt="Youth Unlimited Logo"
-          width={200}
-          className="invert dark:invert-0"
-        ></Image>
-      </Link>
-      {features.map((item) => (
-        <Link key={item} href={`/dashboard/${item}`} className={cn(
-          buttonVariants({ variant: "ghost" }),
-          router.pathname.startsWith(`/dashboard/${item}`)
-            ? "bg-muted hover:bg-muted"
-            : "hover:bg-transparent hover:underline",
-          "justify-start capitalize"
-        )}>
-          {item}
+  return (
+    <>
+      <nav className="bg-dashboard fixed flex h-screen w-[250px] flex-col border-r p-4">
+        <Link
+          href="/dashboard"
+          className="font-xl inline-flex pb-4 font-semibold tracking-tight"
+        >
+          <Image
+            src={logo}
+            alt="Youth Unlimited Logo"
+            width={200}
+            // className="invert dark:invert-0"
+          ></Image>
         </Link>
-      ))}
-      <Button variant="destructive" className="mt-auto" onClick={() => signOut({
-        callbackUrl: "/login"
-      })}>Log out</Button>
-    </nav>
-    <main className="flex-1 h-screen overflow-auto py-4 px-8 ml-[250px]">
-      {children}
-    </main>
-  </>
-}
+        <div className="mt-8 flex flex-col">
+          {features.map((item) => (
+            <Link
+              key={item}
+              href={`/dashboard/${item}`}
+              className={cn(
+                buttonVariants({ variant: "ghost" }),
+                router.pathname.startsWith(`/dashboard/${item}`)
+                  ? "bg-muted hover:bg-muted"
+                  : "hover:hover:underline",
+                "justify-start capitalize",
+                "text-white",
+                "bg-dashboard",
+                "ml-3",
+                lato.className,
+              )}
+            >
+              {item}
+            </Link>
+          ))}
+        </div>
+
+        <Button
+          variant="ghost"
+          className="bg-destructiveButton hover:bg-destructiveButton mb-4 mt-auto rounded-none"
+        >
+          Sign out
+        </Button>
+      </nav>
+      <main className="ml-[250px] h-screen flex-1 overflow-auto px-8 py-4">
+        {children}
+      </main>
+    </>
+  );
+};
