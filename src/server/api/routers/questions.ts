@@ -9,7 +9,6 @@ export const questionRouter = createTRPCRouter({
     // Get all questions
     return ctx.db.select().from(questions);
   }),
-
   createQuestion: publicProcedure
     .input(
       z.object({

@@ -6,6 +6,17 @@ import { programSchema } from "@/components/program/AddForm";
 
 
 export const programRouter = createTRPCRouter({
+  
+  getProgramToQuestions: publicProcedure
+  .input(z.object({ id: z.number() }))
+  .query(async ({ ctx, input }) => {
+    // Get program by id
+    const result = await ctx.db
+      .select()
+      .from(programsToQuestions)
+      .where(eq(programsToQuestions.pid, input.id));
+    return result;
+  }),
   getById: publicProcedure
     .input(z.object({ id: z.number() }))
     .query(async ({ ctx, input }) => {
