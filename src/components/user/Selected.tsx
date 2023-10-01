@@ -3,7 +3,7 @@ import ErrorPage from "next/error";
 import { Card, CardContent, CardDescription, CardTitle } from "../ui/card";
 import { user } from "@nextui-org/react";
 
-export const UserSelectedPrograms= ({ id }: { id: number }) => {
+export const UserSelectedPrograms = ({ id }: { id: number }) => {
   const {
     data: userToPrograms,
     isError: isErrorUserToPrograms,
@@ -35,7 +35,8 @@ export const UserSelectedPrograms= ({ id }: { id: number }) => {
       <CardDescription>{user?.role}</CardDescription>
       <CardContent className="flex flex-col gap-5">
         <p>
-          {user.email}{user.phoneNumber ? ` - ${user.phoneNumber}` : ""}
+          {user?.email}
+          {user?.phoneNumber ? ` - ${user?.phoneNumber}` : ""}
         </p>
 
         {selectedPrograms && selectedPrograms.length > 0 ? (
