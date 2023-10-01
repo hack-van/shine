@@ -1,40 +1,34 @@
-import { useForm } from "react-hook-form";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import AnswerContext from "@/context/answer";
+import { api } from "@/utils/api";
+import { useContext } from "react";
 
-type Question = { id: string, title: string }
-type Props = {
-  questions: {
-    qid: number,
-    question: string | null
-  }[]
-}
+export const SurveyFromProgram = ({ id }: { id: number }) => {
+  const { isLoading, data, isError } = api.survey.getQuestionsByProgramId.useQuery({ id });
+  const { setAnswer, answer } = useContext(AnswerContext);
 
-export const SurveyForm = ({questions}: Props) => {
-  const form = useForm();
+  const updateAnswer = (qid: number, value: number) => {
+    const key = `${id}#${qid}`
+    setAnswer((old) => ({
+      ...old,
+      [key]: value
+    }))
+  }
 
-  return <Form {...form}>
-    <form className="grid gap-8" onSubmit={form.handleSubmit((data) => console.log(data))}>
-      {
-        questions.map(q => (
-          <FormField
-            key={q.qid}
-            control={form.control}
-            name={`${q.qid}`}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{q.question}</FormLabel>
-                <FormControl>
-                  <Input type="number" min={0} required {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        ))
-      }
-      <Button type="submit">Submit</Button>
-    </form>
-  </Form>
+  if (isLoading) return <div>Loading...</div>
+  if (isError || !data) return <div>Error</div>
+
+  return data.questions.map(q => (
+    <div key={`${id}#${q.qid}`} className="flex gap-2 items-center py-4">
+      <Label className="flex-1" htmlFor={`${id}#${q.qid}`}>{q.question}</Label>
+      <Input
+        type="number"
+        id={`${id}#${q.qid}`}
+        value={answer[`${id}#${q.qid}`] ?? 0}
+        onChange={(e) => updateAnswer(q.qid, +e.target.value)}
+        min={0}
+        className="text-right w-[60px]" />
+    </div>
+  ))
 }

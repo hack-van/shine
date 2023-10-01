@@ -1,8 +1,14 @@
-import { SurveyForm } from "@/components/SurveyForm";
+import type { AppRouter } from "@/server/api/root";
 import { api } from "@/utils/api";
 import ErrorPage from "next/error";
-import Head from "next/head";
 import { useRouter } from "next/router";
+
+import { SurveyFromProgram } from "@/components/SurveyForm";
+import { Button } from "@/components/ui/button";
+import AnswerContext, { type Answer } from "@/context/answer";
+import type { inferRouterOutputs } from '@trpc/server';
+import { useState } from "react";
+type Programs = inferRouterOutputs<AppRouter>["survey"]["getProgramsByUserId"]["programs"];
 
 export default function Page() {
   const router = useRouter();
@@ -11,37 +17,47 @@ export default function Page() {
   if (isNaN(id)) {
     return <ErrorPage statusCode={404} />;
   }
+  const { data, isLoading, isError } = api.survey.getProgramsByUserId.useQuery({ id })
 
-  return <SurveyPage id={id} />;
-}
-
-const SurveyPage = ({ id }: { id: number }) => {
-  const {
-    data: survey,
-    isError,
-    isLoading,
-  } = api.survey.getById.useQuery({ id });
-
-  if (!isLoading && !isError && !survey) {
-    return <ErrorPage statusCode={404} />;
-  }
-
+  if (isLoading) return <div>Loading...</div>;
+  if (data === undefined || isError) return <div>Error</div>
   return (
     <>
-      <Head>
-        <title>{survey?.info?.name ?? "Survey"}</title>
-      </Head>
-      <main className="flex min-h-screen justify-center p-4">
-        <div className="mt-8 flex w-full max-w-md flex-col gap-6">
-          <div className="space-y-2">
-            <h1 className="text-2xl font-semibold tracking-tight">
-              {survey?.info?.name ?? "Survey"}
-            </h1>
-            <p>Please fill out the survey after this event</p>
-          </div>
-          <SurveyForm questions={survey?.questions ?? []} />
-        </div>
-      </main>
+      <SurveyMultistepForm programs={data.programs} />
     </>
-  );
-};
+  )
+}
+
+function SurveyMultistepForm({ programs }: { programs: Programs }) {
+  const [answer, setAnswer] = useState<Answer>({})
+  const [step, setStep] = useState(0);
+  const next = () => setStep(step => Math.min(step + 1, programs.length - 1))
+  const prev = () => setStep(step => Math.max(step - 1, 0));
+  const submit = () => console.log(answer)
+
+
+  return <main className="flex flex-col min-h-screen items-center">
+    {/* Progress bar */}
+    <div className="w-full">
+      <div className="bg-foreground-600 p-1" style={{
+        width: `${(step + 1) / programs.length * 100}%`
+      }}></div>
+    </div>
+    <div className="flex flex-col w-full max-w-md py-8">
+      {/* Header */}
+      <h1 className="text-2xl font-bold">{programs[step]!.name}</h1>
+      {/* Content */}
+      <AnswerContext.Provider value={{ answer, setAnswer }}>
+        <SurveyFromProgram id={programs[step]!.pid} />
+      </AnswerContext.Provider>
+
+      {/* Navigation */}
+      <div className="grid gap-2 grid-cols-2">
+        <Button variant="ghost" disabled={step === 0} onClick={prev}>Previous</Button>
+        <Button onClick={step === programs.length - 1 ? submit : next}>
+          {step === programs.length - 1 ? "Submit" : "Next"}
+        </Button>
+      </div>
+    </div>
+  </main >
+}
