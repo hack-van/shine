@@ -6,7 +6,7 @@ import Link from "next/link";
 export default function Page() {
   return (
     <DashboardLayout>
-      <main className="flex flex-col max-w-md mx-auto text-center justify-center gap-5">
+      <main className="m-10 flex max-w-md flex-col items-start gap-5">
         <Link
           href="questions/add"
           className={buttonVariants({
