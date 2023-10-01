@@ -79,7 +79,7 @@ const SearchResultWrapper = ({
   );
 };
 
-export default function QuestionSearch({ questions }) {
+export default function QuestionSearch({ question }) {
   const [searchInput, setSearchInput] = useState("");
   const [filterQuestions, setFilterQuestions] = useState([]);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
